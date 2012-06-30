@@ -1,0 +1,30 @@
+% extends "Page.html"
+
+{% set pageid = "Users" %}
+
+{% block title -%}
+Users
+{%- endblock %}
+
+{% block content %}
+<ul data-role="listview">
+    {% for user in users %}
+    <li>
+        <h1>{{user.fullname}}</h1>
+        {% if not user.enabled %}
+            <p><em>disabled</em></p>
+        {% endif %}
+        {% if user.roles %}
+            <p>roles: {{user.roles|join(', ', attribute='name')}}</p>
+        {% else %}
+            <p><strong>no roles</strong></p>
+        {% endif %}
+        {% if user.mobilephonenumber %}
+            <p>mobile: {{user.mobilephonenumber}}</p>
+        {% endif %}
+        <p>created: {{user.creationdate}}</p>
+        <p>{{user.sessions|count}} sessions</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

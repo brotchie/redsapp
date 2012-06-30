@@ -1,0 +1,27 @@
+% extends "Page.html"
+
+{% set pageid = "Sessions" %}
+{% set timeformat = "%R %A %F" %}
+
+{% block title -%}
+Sessions
+{%- endblock %}
+
+{% block content %}
+<ul data-role="listview">
+    {% for session in sessions %}
+        <li>
+            <a href="sessions/{{session.id}}/checklist">
+                <h1 >Week {{session.week}} -
+                    {{session.location}}
+                </h1>
+                <p><em>{{session.time.strftime(timeformat)}}</em></p>
+                <p><strong>{{session.coordinator.fullname}}</strong></p>
+                {% if session.complete %}
+                <p><img src="static/img/tick_circle.png"/> Completed at {{session.completiontime.strftime(timeformat)}}</p>
+                {% endif %}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

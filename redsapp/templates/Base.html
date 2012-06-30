@@ -1,0 +1,25 @@
+{% set static_root = "/static" %}
+<!DOCTYPE html>
+<html>
+    <head>
+    % block head
+        <title>{% block title %}{% endblock %}</title>
+
+        % block meta
+        <meta content='width=device-width, initial-scale=1' name='viewport' />
+        % endblock
+
+        % block css
+        <link href='{{static_root}}/css/jquery.mobile-1.1.0.css' rel='stylesheet' />
+        % endblock
+
+        % block javascript
+        <script src='{{static_root}}/js/coffee-script.js'></script>
+        <script src='{{static_root}}/js/jquery-1.7.2.js'></script>
+        <script src='{{static_root}}/js/jquery.mobile-1.1.0.js'></script>
+        %endblock
+
+    % endblock head
+    </head>
+    <body>{% block body %}{% endblock %}</body>
+</html>

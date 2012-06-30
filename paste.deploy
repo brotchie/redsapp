@@ -1,0 +1,23 @@
+[app:main]
+use = egg:Paste#urlmap
+/ = redsapp
+/static = static
+#/rum = rum
+
+[app:redsapp]
+use = call:redsapp.web:build_application
+template_path = %(here)s/redsapp/templates
+
+[app:static]
+use = egg:Paste#static
+document_root=%(here)s/static/
+
+[app:rum]
+use = egg:rum
+full_stack = True
+config = %(here)s/rum/development.cfg
+
+[server:main]
+use = egg:Paste#http
+host = 0.0.0.0
+port = 8082

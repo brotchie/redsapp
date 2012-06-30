@@ -1,0 +1,17 @@
+% extends "Base.html"
+
+{% block body %}
+    <div data-role="page" id="{{pageid}}">
+    {% block page %}
+        <div data-role='header'>
+        {% block header %}
+            <h2>{% block title %}{% endblock %}</h2>
+        {% endblock %}
+        </div>
+        <div data-role='content'>{% block content %}{% endblock %}</div>
+        <div data-role='footer'>{% block footer %}
+            <h4>Copyright 2012 Factorial Products Pty. Ltd.</h4>
+        {% endblock %}</div>
+    {% endblock %}
+    </div>
+{% endblock %}

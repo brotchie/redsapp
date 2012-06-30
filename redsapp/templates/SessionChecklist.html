@@ -1,0 +1,64 @@
+% extends "Page.html"
+
+{% set pageid = "SessionChecklist" %}
+{% set timeformat = "%R %A %F" %}
+
+{% block title -%}
+Checklist
+{%- endblock %}
+
+{% macro build_checklist(id, items) %}
+    <ul data-role="listview">
+    {% for item in items %}
+        {% set checked = "checked='True'" if session.complete else "" %}
+        <label><input type="checkbox" {{checked}} name="{{id}}_{{loop.index}}_complete"/>{{item}}</label>
+    {% endfor %}
+    </ul>
+{% endmacro %}
+
+{% block content %}
+    <div>
+        <h2>Week {{session.week}} - {{session.location}}</h2>
+        <p><em>{{session.time.strftime(timeformat)}}</em></p>
+        <p><strong>{{session.coordinator.fullname}}</strong></p>
+    </div>
+    <div data-role="collapsible">
+        <h3>Pre Session Checklist</h3><p/>
+        {{ build_checklist('pre-session-checklist', [
+                "Correct uniform",
+                "Complete equipment checklist",
+                "Arrive 30 minutes prior to commencement",
+                "Complete risk assessment",
+                "Setup activities as per Rookies 2 Reds Coordinator Manual"
+           ]) 
+        }}
+    </div>
+
+    <div data-role="collapsible">
+        <h3>During Session Checklist</h3><p/>
+        {{ build_checklist('during-session-checklist', [
+                "Activities run as per the Rookies 2 Reds Coordinator Manual",
+                "Drink breaks given to participants between each activity"
+           ]) 
+        }}
+    </div>
+
+    <div data-role="collapsible">
+        <h3>Post Session Checklist</h3><p/>
+        {{ build_checklist('post-session-checklist', [
+                "Pack up all equipment",
+                "Complete equipment checklist",
+                "Ensure all participants take personal belongings with them",
+                "Ensure all participants are collected safely by parent/guardian"
+           ]) 
+        }}
+    </div>
+
+    {% if session.complete %}
+        <a data-role="button" data-icon="back" href="/sessions">Back</a>
+    {% else %}
+        <a data-role="button" data-icon="check" href="/sessions">Session Complete</a>
+    {% endif %}
+{% endblock %}
+
+
