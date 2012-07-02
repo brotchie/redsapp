@@ -1,5 +1,5 @@
 from bcrypt import hashpw
-from sqlalchemy import create_engine, Boolean, Column, Integer, String, DateTime, text, Table, ForeignKey
+from sqlalchemy import create_engine, Boolean, Column, Integer, String, DateTime, text, Table, ForeignKey, func, UniqueConstraint, Index
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 
@@ -18,6 +18,8 @@ userroles = Table(
         Column('user_id', Integer, ForeignKey('users.id')),
         Column('role_id', Integer, ForeignKey('roles.id'))
         )
+
+lower = func.lower
 
 class Role(Model):
     __tablename__ = 'roles'
@@ -39,7 +41,7 @@ class User(Model):
     query = Session.query_property()
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, unique=True)
+    name = Column(String)
     fullname = Column(String)
     passwordhash = Column(String)
     mobilephonenumber = Column(String)
@@ -50,15 +52,28 @@ class User(Model):
 
     roles = relationship("Role", secondary=userroles, backref='users')
 
+    #__table_args__ = (Index('name'),)
+
+    def _hashpw(self, password):
+        return hashpw(password, SALT)
+
+    def is_password_valid(self, prospective):
+        return self._hashpw(prospective) == self.passwordhash
+
+    @property
+    def rolenames(self):
+        return {role.name for role in self.roles}
+
     def __init__(self, name, fullname, password, mobilephonenumber=None, enabled=True):
         self.name = name
         self.fullname = fullname
         self.mobilephonenumber = mobilephonenumber
-        self.passwordhash = hashpw(password, SALT)
+        self.passwordhash = self._hashpw(password)
         self.enabled = enabled
 
     def __repr__(self):
         return "<User('{u.name}','{u.fullname}','{u.mobilephonenumber}','{u.creationdate}',{u.enabled})>".format(u=self)
+
 
 class CoachingSession(Model):
     __tablename__ = 'sessions'

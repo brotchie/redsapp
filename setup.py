@@ -5,7 +5,7 @@ __version__ = '0.1'
 from setuptools import setup, find_packages, findall
 
 def include_data_files(*paths):
-    return [(path, findall(path)) for path in paths]
+    return [('share/' + path, findall(path)) for path in paths]
 
 setup(name="redsapp",
       version=__version__,
